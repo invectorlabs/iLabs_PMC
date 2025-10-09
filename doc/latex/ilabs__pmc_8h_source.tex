@@ -1,0 +1,393 @@
+\doxysection{ilabs\+\_\+pmc.\+h}
+\hypertarget{ilabs__pmc_8h_source}{}\label{ilabs__pmc_8h_source}\index{src/ilabs\_pmc.h@{src/ilabs\_pmc.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ iLabs\ Power\ Management\ Controller\ (PMC)\ I2C\ register\ definitions}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *\ This\ section\ was\ cut\ from\ the\ firmware\ file\ Challenger\_2040\_LoRa\_ZP.ino}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ Remembed\ to\ update\ this\ section\ if\ the\ firmware\ is\ updated!}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ addr:\ 0\ (Write)\ \ -\/\ PIT\ Control\ register\ (PIT\_CTRL\_REG)}}
+\DoxyCodeLine{00006\ \textcolor{comment}{}}
+\DoxyCodeLine{00007\ \textcolor{comment}{\ \ \ Control\ register\ for\ the\ Periodic\ Interrupt\ Timer\ (PIT).}}
+\DoxyCodeLine{00008\ \textcolor{comment}{\ \ \ The\ PIT\ is\ responsible\ for\ keeping\ the\ time\ while\ the\ system\ is\ sleeping}}
+\DoxyCodeLine{00009\ \textcolor{comment}{\ \ \ in\ low\ power\ mode.\ As\ described\ in\ the\ data\ sheet\ "{}The\ timing\ of\ the}}
+\DoxyCodeLine{00010\ \textcolor{comment}{\ \ \ first\ PIT\ interrupt\ and\ the\ first\ RTC\ count\ tick\ will\ be\ unknown\ (anytime}}
+\DoxyCodeLine{00011\ \textcolor{comment}{\ \ \ between\ enabling\ and\ a\ full\ period)"{}.\ To\ work\ around\ this\ problem\ the}}
+\DoxyCodeLine{00012\ \textcolor{comment}{\ \ \ interrupt\ period\ is\ exposed\ here\ which\ allows\ the\ system\ designer\ to}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ select\ an\ appropriate\ period\ for\ generating\ the\ delay.}}
+\DoxyCodeLine{00014\ \textcolor{comment}{}}
+\DoxyCodeLine{00015\ \textcolor{comment}{\ \ \ If\ CYC4\ is\ selected\ the\ resolution\ of\ the\ interrupts\ will\ be\ 1/32768\ *\ 4}}
+\DoxyCodeLine{00016\ \textcolor{comment}{\ \ \ seconds\ =\ 122uS\ and\ if\ CYC32768\ is\ selected\ the\ resolution\ will\ be\ 1/32768}}
+\DoxyCodeLine{00017\ \textcolor{comment}{\ \ \ 32768\ =\ 1Second.}}
+\DoxyCodeLine{00018\ \textcolor{comment}{}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ The\ selected\ tick\ period\ is\ also\ used\ to\ increment\ the\ 16-\/bit\ sleep\ timer}}
+\DoxyCodeLine{00020\ \textcolor{comment}{\ \ \ which\ gives\ the\ system\ designer\ freedom\ to\ optimize\ for\ time\ between\ woken}}
+\DoxyCodeLine{00021\ \textcolor{comment}{\ \ \ periods\ and\ current\ consumption.}}
+\DoxyCodeLine{00022\ \textcolor{comment}{}}
+\DoxyCodeLine{00023\ \textcolor{comment}{\ \ \ \ \ \ +-\/+-\/+-\/+-\/+-\/+-\/+-\/+-\/+}}
+\DoxyCodeLine{00024\ \textcolor{comment}{\ \ \ \ \ \ |7|6|5|4|3|2|1|0|}}
+\DoxyCodeLine{00025\ \textcolor{comment}{\ \ \ \ \ \ +-\/+-\/+-\/+-\/+-\/+-\/+-\/+-\/+}}
+\DoxyCodeLine{00026\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ |\ |}}
+\DoxyCodeLine{00027\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ |\ +-\/\ PERIDO[0]}}
+\DoxyCodeLine{00028\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ +-\/-\/-\/\ PERIOD[1]}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ +-\/-\/-\/-\/-\/\ PERIOD[2]}}
+\DoxyCodeLine{00030\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ +-\/-\/-\/-\/-\/-\/-\/\ PERIOD[3]}}
+\DoxyCodeLine{00031\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Not\ implemented}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Not\ implemented}}
+\DoxyCodeLine{00033\ \textcolor{comment}{\ \ \ \ \ \ \ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Not\ implemented}}
+\DoxyCodeLine{00034\ \textcolor{comment}{\ \ \ \ \ \ \ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ 32768Hz/1024Hz}}
+\DoxyCodeLine{00035\ \textcolor{comment}{}}
+\DoxyCodeLine{00036\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ PIT\_CTRL\_REG\ \ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#define\ PIT\_CTRL\_OFF\ \ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#define\ PIT\_CTRL\_CYC4\ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#define\ PIT\_CTRL\_CYC8\ \ \ \ \ \ \ 2}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ PIT\_CTRL\_CYC16\ \ \ \ \ \ 3}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ PIT\_CTRL\_CYC32\ \ \ \ \ \ 4}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#define\ PIT\_CTRL\_CYC64\ \ \ \ \ \ 5}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#define\ PIT\_CTRL\_CYC128\ \ \ \ \ 6}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#define\ PIT\_CTRL\_CYC256\ \ \ \ \ 7}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#define\ PIT\_CTRL\_CYC512\ \ \ \ \ 8}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#define\ PIT\_CTRL\_CYC1024\ \ \ \ 9}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#define\ PIT\_CTRL\_CYC2048\ \ \ \ 10}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#define\ PIT\_CTRL\_CYC4096\ \ \ \ 11}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#define\ PIT\_CTRL\_CYC8192\ \ \ \ 12}}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#define\ PIT\_CTRL\_CYC16384\ \ \ 13\ }\textcolor{comment}{/*\ Default\ (0.5S)\ */}\textcolor{preprocessor}{}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#define\ PIT\_CTRL\_CYC32768\ \ \ 14}}
+\DoxyCodeLine{00053\ \textcolor{keyword}{enum}\ pit\_ctrl\_clk\ \{}
+\DoxyCodeLine{00054\ \ \ PIT\_CTRL\_CLK\_32768\ =\ 0,}
+\DoxyCodeLine{00055\ \ \ PIT\_CTRL\_CLK\_1024\ =\ 1}
+\DoxyCodeLine{00056\ \};}
+\DoxyCodeLine{00057\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00058\ \textcolor{comment}{\ \ \ Register\ map\ of\ the\ I2C\ registers.}}
+\DoxyCodeLine{00059\ \textcolor{comment}{}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ \ \ addr:\ 1\ (Write)\ \ -\/\ Control\ register\ (CTRL\_REG0)}}
+\DoxyCodeLine{00061\ \textcolor{comment}{}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ \ \ Controls\ interrups\ and\ reset\ sources.}}
+\DoxyCodeLine{00063\ \textcolor{comment}{}}
+\DoxyCodeLine{00064\ \textcolor{comment}{\ \ \ \ \ \ +-\/+-\/+-\/+-\/+-\/+-\/+-\/+-\/+}}
+\DoxyCodeLine{00065\ \textcolor{comment}{\ \ \ \ \ \ |7|6|5|4|3|2|1|0|}}
+\DoxyCodeLine{00066\ \textcolor{comment}{\ \ \ \ \ \ +-\/+-\/+-\/+-\/+-\/+-\/+-\/+-\/+}}
+\DoxyCodeLine{00067\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ |\ |}}
+\DoxyCodeLine{00068\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ |\ +-\/\ Interrupt\ enable}}
+\DoxyCodeLine{00069\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ +-\/-\/-\/\ Enable\ sleep\ mode}}
+\DoxyCodeLine{00070\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ +-\/-\/-\/-\/-\/\ Reset\ device}}
+\DoxyCodeLine{00071\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ +-\/-\/-\/-\/-\/-\/-\/\ Enable\ WU1}}
+\DoxyCodeLine{00072\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Enable\ WU2}}
+\DoxyCodeLine{00073\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Enable\ WU3}}
+\DoxyCodeLine{00074\ \textcolor{comment}{\ \ \ \ \ \ \ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Enable\ RXD\ wakeup}}
+\DoxyCodeLine{00075\ \textcolor{comment}{\ \ \ \ \ \ \ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Enable\ D5\ (DI0)\ wakeup}}
+\DoxyCodeLine{00076\ \textcolor{comment}{}}
+\DoxyCodeLine{00077\ \textcolor{comment}{\ \ \ Bit\ 0\ :\ Interrupt\ enable\ (Default\ :\ 0)}}
+\DoxyCodeLine{00078\ \textcolor{comment}{\ \ \ \ \ Setting\ this\ bit\ high\ will\ enable\ interrupts\ when\ a\ wakeup\ condition}}
+\DoxyCodeLine{00079\ \textcolor{comment}{\ \ \ \ \ occurs.\ The\ interrupt\ comes\ out\ on\ CHGR\_INT\ pin\ and\ is\ push/pull\ active\ low.}}
+\DoxyCodeLine{00080\ \textcolor{comment}{}}
+\DoxyCodeLine{00081\ \textcolor{comment}{\ \ \ Bit\ 1\ :\ Enable\ sleep\ mode\ (Default\ :\ 0)}}
+\DoxyCodeLine{00082\ \textcolor{comment}{\ \ \ \ \ This\ bit\ enables/disables\ the\ deep\ sleep\ mode\ functionality\ of\ the\ PMD.}}
+\DoxyCodeLine{00083\ \textcolor{comment}{\ \ \ \ \ Whenever\ a\ deep\ sleep\ mode\ condition\ is\ detected\ it\ will\ force\ the\ CHGR\_EN}}
+\DoxyCodeLine{00084\ \textcolor{comment}{\ \ \ \ \ pin\ low,\ shutting\ down\ the\ Challenger\ board\ and\ stay\ low\ for\ the\ duration}}
+\DoxyCodeLine{00085\ \textcolor{comment}{\ \ \ \ \ of\ the\ deep\ sleep\ period.}}
+\DoxyCodeLine{00086\ \textcolor{comment}{}}
+\DoxyCodeLine{00087\ \textcolor{comment}{\ \ \ Bit\ 2\ :\ Reset\ device\ (Default\ :\ 0)}}
+\DoxyCodeLine{00088\ \textcolor{comment}{\ \ \ \ \ Setting\ this\ bit\ to\ 1\ will\ reset\ the\ device\ into\ a\ known\ state.}}
+\DoxyCodeLine{00089\ \textcolor{comment}{}}
+\DoxyCodeLine{00090\ \textcolor{comment}{\ \ \ Bit\ 3\ :\ Enable\ wake\ up\ source\ 1\ (Default\ :\ 0)}}
+\DoxyCodeLine{00091\ \textcolor{comment}{\ \ \ \ \ Setting\ this\ bit\ high\ will\ enable\ wakeup\ source\ 1}}
+\DoxyCodeLine{00092\ \textcolor{comment}{}}
+\DoxyCodeLine{00093\ \textcolor{comment}{\ \ \ Bit\ 4\ :\ Enable\ wake\ up\ source\ 2\ (Default\ :\ 0)}}
+\DoxyCodeLine{00094\ \textcolor{comment}{\ \ \ \ \ Setting\ this\ bit\ high\ will\ enable\ wakeup\ source\ 2}}
+\DoxyCodeLine{00095\ \textcolor{comment}{}}
+\DoxyCodeLine{00096\ \textcolor{comment}{\ \ \ Bit\ 5\ :\ Enable\ wake\ up\ source\ 3\ (Default\ :\ 0)}}
+\DoxyCodeLine{00097\ \textcolor{comment}{\ \ \ \ \ Setting\ this\ bit\ high\ will\ enable\ wakeup\ source\ 3}}
+\DoxyCodeLine{00098\ \textcolor{comment}{}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ Bit\ 6\ :\ Enable\ wake\ up\ source\ RXD\ (Default\ :\ 0)}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ \ Setting\ this\ bit\ high\ will\ enable\ wakeup\ source\ RXD}}
+\DoxyCodeLine{00101\ \textcolor{comment}{}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ Bit\ 7\ :\ Enable\ wake\ up\ source\ D5/DIO0\ (Default\ :\ 0)}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ \ Setting\ this\ bit\ high\ will\ enable\ wakeup\ source\ D5/DIO0}}
+\DoxyCodeLine{00104\ \textcolor{comment}{}}
+\DoxyCodeLine{00105\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00106\ \textcolor{preprocessor}{\#define\ CTRL\_REG0\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00107\ \textcolor{preprocessor}{\#define\ CTRL\_REG0\_INTERRUPT\_ENABLE\ \ 0x01}}
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#define\ CTRL\_REG0\_SLEEP\_ENABLE\ \ \ \ \ \ 0x02}}
+\DoxyCodeLine{00109\ \textcolor{preprocessor}{\#define\ CTRL\_REG0\_RESET\ \ \ \ \ \ \ \ \ \ \ \ \ 0x04}}
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\#define\ CTRL\_REG0\_ENABLE\_WU1\ \ \ \ \ \ \ \ 0x08}}
+\DoxyCodeLine{00111\ \textcolor{preprocessor}{\#define\ CTRL\_REG0\_ENABLE\_WU2\ \ \ \ \ \ \ \ 0x10}}
+\DoxyCodeLine{00112\ \textcolor{preprocessor}{\#define\ CTRL\_REG0\_ENABLE\_WU3\ \ \ \ \ \ \ \ 0x20}}
+\DoxyCodeLine{00113\ \textcolor{preprocessor}{\#define\ CTRL\_REG0\_ENABLE\_WU\_RXD\ \ \ \ \ 0x40}}
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\#define\ CTRL\_REG0\_ENABLE\_WU\_DIO0\ \ \ \ 0x80}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \textcolor{comment}{/*\ addr:\ 2\ (Write)\ \ -\/\ Control\ register\ (CTRL\_REG1)}}
+\DoxyCodeLine{00117\ \textcolor{comment}{}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ Expansion\ of\ control\ register\ 0\ for\ more\ complex\ designs}}
+\DoxyCodeLine{00119\ \textcolor{comment}{}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \ \ +-\/+-\/+-\/+-\/+-\/+-\/+-\/+-\/+}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \ \ |7|6|5|4|3|2|1|0|}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\ \ \ \ \ \ +-\/+-\/+-\/+-\/+-\/+-\/+-\/+-\/+}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ |\ |}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ |\ +-\/\ Not\ implemented}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ +-\/-\/-\/\ Not\ implemented}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ +-\/-\/-\/-\/-\/\ Not\ implemented}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ +-\/-\/-\/-\/-\/-\/-\/\ Not\ implemented}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Not\ implemented}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Not\ implemented}}
+\DoxyCodeLine{00130\ \textcolor{comment}{\ \ \ \ \ \ \ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Not\ implemented}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \ \ \ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Not\ implemented}}
+\DoxyCodeLine{00132\ \textcolor{comment}{}}
+\DoxyCodeLine{00133\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00134\ \textcolor{preprocessor}{\#define\ CTRL\_REG1\ \ \ \ \ \ \ 2}}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ addr:\ 3\ (Write)\ \ -\/\ Polarity\ register\ (POL\_REG0)}}
+\DoxyCodeLine{00138\ \textcolor{comment}{}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ Polarity\ control\ register.}}
+\DoxyCodeLine{00140\ \textcolor{comment}{}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \ \ +-\/+-\/+-\/+-\/+-\/+-\/+-\/+-\/+}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \ \ |7|6|5|4|3|2|1|0|}}
+\DoxyCodeLine{00143\ \textcolor{comment}{\ \ \ \ \ \ +-\/+-\/+-\/+-\/+-\/+-\/+-\/+-\/+}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ |\ |}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ |\ +-\/\ Interrupt\ polarity}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ +-\/-\/-\/}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ +-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ +-\/-\/-\/-\/-\/-\/-\/\ Polarity\ WU1}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Polarity\ WU2}}
+\DoxyCodeLine{00150\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Polarity\ WU3}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \ \ \ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Polarity\ RXD\ wakeup}}
+\DoxyCodeLine{00152\ \textcolor{comment}{\ \ \ \ \ \ \ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Polarity\ D5\ (DI0)\ wakeup}}
+\DoxyCodeLine{00153\ \textcolor{comment}{}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ Bit\ 0\ :\ Interrupt\ enable\ (Default\ :\ 0)}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \ Setting\ this\ bit\ high\ will\ invert\ the\ function\ of\ the\ interrupt\ pin.\ By}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \ default\ interrupts\ are\ active\ low,\ setting\ this\ bit\ to\ "{}1"{}\ will\ make\ the}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \ interrupt\ output\ active\ high.}}
+\DoxyCodeLine{00158\ \textcolor{comment}{}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ Bit\ 3\ :\ Polarity\ of\ wake\ up\ source\ 1\ (Default\ :\ 0)}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \ Setting\ this\ bit\ high\ will\ invert\ the\ polarity\ of\ wakeup\ source\ 1.\ By}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \ default\ (bit\ set\ to\ "{}0"{})\ this\ is\ a\ positive\ wakeup\ source\ i.e.\ the}}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \ system\ will\ wake\ up\ on\ a\ positive\ signal\ change.\ By\ setting\ thus\ bit}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \ to\ "{}1"{}\ the\ system\ will\ now\ wake\ up\ on\ a\ negative\ signal\ change.}}
+\DoxyCodeLine{00164\ \textcolor{comment}{}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ Bit\ 4\ :\ Polarity\ of\ wake\ up\ source\ 2\ (Default\ :\ 0)}}
+\DoxyCodeLine{00166\ \textcolor{comment}{\ \ \ \ \ Setting\ this\ bit\ high\ will\ invert\ the\ polarity\ of\ wakeup\ source\ 1.\ By}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \ default\ (bit\ set\ to\ "{}0"{})\ this\ is\ a\ positive\ wakeup\ source\ i.e.\ the}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \ system\ will\ wake\ up\ on\ a\ positive\ signal\ change.\ By\ setting\ thus\ bit}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \ to\ "{}1"{}\ the\ system\ will\ now\ wake\ up\ on\ a\ negative\ signal\ change.}}
+\DoxyCodeLine{00170\ \textcolor{comment}{}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ Bit\ 5\ :\ Polarity\ of\ wake\ up\ source\ 3\ (Default\ :\ 0)}}
+\DoxyCodeLine{00172\ \textcolor{comment}{\ \ \ \ \ Setting\ this\ bit\ high\ will\ invert\ the\ polarity\ of\ wakeup\ source\ 1.\ By}}
+\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \ default\ (bit\ set\ to\ "{}0"{})\ this\ is\ a\ positive\ wakeup\ source\ i.e.\ the}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \ system\ will\ wake\ up\ on\ a\ positive\ signal\ change.\ By\ setting\ thus\ bit}}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \ to\ "{}1"{}\ the\ system\ will\ now\ wake\ up\ on\ a\ negative\ signal\ change.}}
+\DoxyCodeLine{00176\ \textcolor{comment}{}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ Bit\ 6\ :\ Polarity\ of\ wake\ up\ source\ RXD\ (Default\ :\ 0)}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \ Setting\ this\ bit\ high\ will\ invert\ the\ polarity\ of\ wakeup\ source\ 1.\ By}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \ default\ (bit\ set\ to\ "{}0"{})\ this\ is\ a\ positive\ wakeup\ source\ i.e.\ the}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \ system\ will\ wake\ up\ on\ a\ positive\ signal\ change.\ By\ setting\ thus\ bit}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \ to\ "{}1"{}\ the\ system\ will\ now\ wake\ up\ on\ a\ negative\ signal\ change.}}
+\DoxyCodeLine{00182\ \textcolor{comment}{}}
+\DoxyCodeLine{00183\ \textcolor{comment}{\ \ \ Bit\ 7\ :\ Polarity\ of\ wake\ up\ source\ D5/DIO0\ (Default\ :\ 0)}}
+\DoxyCodeLine{00184\ \textcolor{comment}{\ \ \ \ \ Setting\ this\ bit\ high\ will\ invert\ the\ polarity\ of\ wakeup\ source\ 1.\ By}}
+\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \ default\ (bit\ set\ to\ "{}0"{})\ this\ is\ a\ positive\ wakeup\ source\ i.e.\ the}}
+\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \ system\ will\ wake\ up\ on\ a\ positive\ signal\ change.\ By\ setting\ thus\ bit}}
+\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \ to\ "{}1"{}\ the\ system\ will\ now\ wake\ up\ on\ a\ negative\ signal\ change.}}
+\DoxyCodeLine{00188\ \textcolor{comment}{}}
+\DoxyCodeLine{00189\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00190\ \textcolor{preprocessor}{\#define\ POL\_REG0\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 3}}
+\DoxyCodeLine{00191\ \textcolor{preprocessor}{\#define\ POL\_REG0\_INTERRUPT\ \ \ \ \ 0x01}}
+\DoxyCodeLine{00192\ \textcolor{preprocessor}{\#define\ POL\_REG0\_WU1\ \ \ \ \ \ \ \ \ \ \ 0x08}}
+\DoxyCodeLine{00193\ \textcolor{preprocessor}{\#define\ POL\_REG0\_WU2\ \ \ \ \ \ \ \ \ \ \ 0x10}}
+\DoxyCodeLine{00194\ \textcolor{preprocessor}{\#define\ POL\_REG0\_WU3\ \ \ \ \ \ \ \ \ \ \ 0x20}}
+\DoxyCodeLine{00195\ \textcolor{preprocessor}{\#define\ POL\_REG0\_WU\_RXD\ \ \ \ \ \ \ \ 0x40}}
+\DoxyCodeLine{00196\ \textcolor{preprocessor}{\#define\ POL\_REG0\_WU\_DIO0\ \ \ \ \ \ \ 0x80}}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \textcolor{comment}{/*\ addr:\ 4\ (Write)\ \ -\/\ Polarity\ register\ (POL\_REG1)}}
+\DoxyCodeLine{00199\ \textcolor{comment}{}}
+\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ Expansion\ of\ polarity\ register\ 0\ for\ more\ complex\ designs}}
+\DoxyCodeLine{00201\ \textcolor{comment}{}}
+\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ \ \ \ +-\/+-\/+-\/+-\/+-\/+-\/+-\/+-\/+}}
+\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ \ |7|6|5|4|3|2|1|0|}}
+\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \ \ +-\/+-\/+-\/+-\/+-\/+-\/+-\/+-\/+}}
+\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ |\ |}}
+\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ |\ +-\/\ Not\ implemented}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ +-\/-\/-\/\ Not\ implemented}}
+\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ +-\/-\/-\/-\/-\/\ Not\ implemented}}
+\DoxyCodeLine{00209\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ +-\/-\/-\/-\/-\/-\/-\/\ Not\ implemented}}
+\DoxyCodeLine{00210\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Not\ implemented}}
+\DoxyCodeLine{00211\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Not\ implemented}}
+\DoxyCodeLine{00212\ \textcolor{comment}{\ \ \ \ \ \ \ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Not\ implemented}}
+\DoxyCodeLine{00213\ \textcolor{comment}{\ \ \ \ \ \ \ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Not\ implemented}}
+\DoxyCodeLine{00214\ \textcolor{comment}{}}
+\DoxyCodeLine{00215\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00216\ \textcolor{preprocessor}{\#define\ POL\_REG1\ \ \ \ \ \ \ 4}}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \textcolor{comment}{/*\ addr:\ 5\ (Write)\ \ \ -\/\ Sleep\ timer\ (SLEEP\_TMR\_LO)}}
+\DoxyCodeLine{00219\ \textcolor{comment}{}}
+\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ The\ least\ significant\ byte\ of\ the\ 16-\/bit\ sleep\ timer.}}
+\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ Sleep\ time\ is\ measured\ in\ steps\ of\ 0.1\ seconds\ meaning\ that\ the\ PMD\ can\ force}}
+\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ the\ connected\ challenger\ board\ into\ sleep\ between\ 100\ milliseconds\ all\ the}}
+\DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ way\ up\ to\ 6553.5\ seconds.}}
+\DoxyCodeLine{00224\ \textcolor{comment}{}}
+\DoxyCodeLine{00225\ \textcolor{comment}{}}
+\DoxyCodeLine{00226\ \textcolor{comment}{\ \ \ \ \ \ +-\/+-\/+-\/+-\/+-\/+-\/+-\/+-\/+}}
+\DoxyCodeLine{00227\ \textcolor{comment}{\ \ \ \ \ \ |7|6|5|4|3|2|1|0|}}
+\DoxyCodeLine{00228\ \textcolor{comment}{\ \ \ \ \ \ +-\/+-\/+-\/+-\/+-\/+-\/+-\/+-\/+}}
+\DoxyCodeLine{00229\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ |\ |}}
+\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ |\ +-\/\ Bit\ 0}}
+\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ +-\/-\/-\/\ Bit\ 1}}
+\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ +-\/-\/-\/-\/-\/\ Bit\ 2}}
+\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ +-\/-\/-\/-\/-\/-\/-\/\ Bit\ 3}}
+\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Bit\ 4}}
+\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/Bit\ 5}}
+\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ \ \ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Bit\ 6}}
+\DoxyCodeLine{00237\ \textcolor{comment}{\ \ \ \ \ \ \ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Bit\ 7}}
+\DoxyCodeLine{00238\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00239\ \textcolor{preprocessor}{\#define\ SLEEP\_TMR\_LO\ \ \ \ 5}}
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ \textcolor{comment}{/*\ addr:\ 6\ (Write)\ \ \ -\/\ Sleep\ timer\ (SLEEP\_TMR\_HI)}}
+\DoxyCodeLine{00242\ \textcolor{comment}{}}
+\DoxyCodeLine{00243\ \textcolor{comment}{\ \ \ The\ most\ significant\ byte\ of\ the\ 16-\/bit\ sleep\ timer.}}
+\DoxyCodeLine{00244\ \textcolor{comment}{}}
+\DoxyCodeLine{00245\ \textcolor{comment}{}}
+\DoxyCodeLine{00246\ \textcolor{comment}{\ \ \ \ \ \ +-\/+-\/+-\/+-\/+-\/+-\/+-\/+-\/+}}
+\DoxyCodeLine{00247\ \textcolor{comment}{\ \ \ \ \ \ |7|6|5|4|3|2|1|0|}}
+\DoxyCodeLine{00248\ \textcolor{comment}{\ \ \ \ \ \ +-\/+-\/+-\/+-\/+-\/+-\/+-\/+-\/+}}
+\DoxyCodeLine{00249\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ |\ |}}
+\DoxyCodeLine{00250\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ |\ +-\/\ Bit\ 8}}
+\DoxyCodeLine{00251\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ +-\/-\/-\/\ Bit\ 9}}
+\DoxyCodeLine{00252\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ +-\/-\/-\/-\/-\/\ Bit\ 10}}
+\DoxyCodeLine{00253\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ +-\/-\/-\/-\/-\/-\/-\/\ Bit\ 11}}
+\DoxyCodeLine{00254\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Bit\ 12}}
+\DoxyCodeLine{00255\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/Bit\ 13}}
+\DoxyCodeLine{00256\ \textcolor{comment}{\ \ \ \ \ \ \ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Bit\ 14}}
+\DoxyCodeLine{00257\ \textcolor{comment}{\ \ \ \ \ \ \ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Bit\ 15}}
+\DoxyCodeLine{00258\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00259\ \textcolor{preprocessor}{\#define\ SLEEP\_TMR\_HI\ \ \ \ 6}}
+\DoxyCodeLine{00260\ }
+\DoxyCodeLine{00261\ \textcolor{comment}{/*\ addr:\ 7\ (Write)\ \ \ -\/\ Led\ control\ register\ (LED\_REG)}}
+\DoxyCodeLine{00262\ \textcolor{comment}{}}
+\DoxyCodeLine{00263\ \textcolor{comment}{\ \ \ This\ controls\ the\ LED's\ on\ the\ board.\ Pins\ are\ configured}}
+\DoxyCodeLine{00264\ \textcolor{comment}{\ \ \ as\ outputs\ and\ set\ to\ 0\ at\ reset.}}
+\DoxyCodeLine{00265\ \textcolor{comment}{}}
+\DoxyCodeLine{00266\ \textcolor{comment}{}}
+\DoxyCodeLine{00267\ \textcolor{comment}{\ \ \ \ \ \ +-\/+-\/+-\/+-\/+-\/+-\/+-\/+-\/+}}
+\DoxyCodeLine{00268\ \textcolor{comment}{\ \ \ \ \ \ |7|6|5|4|3|2|1|0|}}
+\DoxyCodeLine{00269\ \textcolor{comment}{\ \ \ \ \ \ +-\/+-\/+-\/+-\/+-\/+-\/+-\/+-\/+}}
+\DoxyCodeLine{00270\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ |\ |}}
+\DoxyCodeLine{00271\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ |\ +-\/\ LED\ 1\ (Green)}}
+\DoxyCodeLine{00272\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ +-\/-\/-\/\ LED\ 2\ (Red)}}
+\DoxyCodeLine{00273\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ +-\/-\/-\/-\/-\/\ Bit\ 10}}
+\DoxyCodeLine{00274\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ +-\/-\/-\/-\/-\/-\/-\/\ Bit\ 11}}
+\DoxyCodeLine{00275\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Bit\ 12}}
+\DoxyCodeLine{00276\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/Bit\ 13}}
+\DoxyCodeLine{00277\ \textcolor{comment}{\ \ \ \ \ \ \ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Bit\ 14}}
+\DoxyCodeLine{00278\ \textcolor{comment}{\ \ \ \ \ \ \ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Bit\ 15}}
+\DoxyCodeLine{00279\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00280\ \textcolor{preprocessor}{\#define\ LED\_REG\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 7}}
+\DoxyCodeLine{00281\ \textcolor{preprocessor}{\#define\ LED\_REG\_LED1\_GREEN\ \ 0x01}}
+\DoxyCodeLine{00282\ \textcolor{preprocessor}{\#define\ LED\_REG\_LED2\_RED\ \ \ \ 0x02}}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00284\ \textcolor{comment}{/*\ addr:\ 8\ (Write)\ \ \ -\/\ Command\ register\ (CMD\_REG)}}
+\DoxyCodeLine{00285\ \textcolor{comment}{}}
+\DoxyCodeLine{00286\ \textcolor{comment}{\ \ \ This\ register\ accepts\ a\ number\ of\ different\ commands\ that}}
+\DoxyCodeLine{00287\ \textcolor{comment}{\ \ \ are\ used\ to\ place\ the\ system\ in\ different\ states.\ Currently}}
+\DoxyCodeLine{00288\ \textcolor{comment}{\ \ \ the\ following\ commands\ are\ defined\ and\ implemented.}}
+\DoxyCodeLine{00289\ \textcolor{comment}{}}
+\DoxyCodeLine{00290\ \textcolor{comment}{\ \ \ CMD\_SYS\_RESET\ \ \ \ 0x01\ -\/\ Resets\ the\ system\ by\ pulling\ the\ reset}}
+\DoxyCodeLine{00291\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ line\ of\ the\ system\ low.}}
+\DoxyCodeLine{00292\ \textcolor{comment}{\ \ \ CMD\_SLEEP\_1\ \ \ \ \ \ 0x02\ -\/\ Sets\ the\ system\ in\ sleep\ mode\ and\ wakes}}
+\DoxyCodeLine{00293\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ up\ after\ the\ time\ defined\ in\ the\ sleep}}
+\DoxyCodeLine{00294\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ timer.}}
+\DoxyCodeLine{00295\ \textcolor{comment}{\ \ \ CMD\_SLEEP\_2\ \ \ \ \ \ 0x03\ -\/\ Enters\ sleep\ and\ only\ wakes\ up\ on\ any\ of}}
+\DoxyCodeLine{00296\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ the\ enabled\ wake\ up\ sources\ defined\ in}}
+\DoxyCodeLine{00297\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CTRL\_REG.}}
+\DoxyCodeLine{00298\ \textcolor{comment}{\ \ \ CMD\_SLEEP\_3\ \ \ \ \ \ 0x04\ -\/\ Enters\ sleep\ and\ wakes\ up\ either\ after}}
+\DoxyCodeLine{00299\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ the\ defined\ time\ in\ the\ sleep\ timer\ or}}
+\DoxyCodeLine{00300\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ when\ any\ of\ the\ wake\ up\ sources\ are}}
+\DoxyCodeLine{00301\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ triggered.}}
+\DoxyCodeLine{00302\ \textcolor{comment}{\ \ \ CMD\_CLEAR\_NVRAM\ \ 0x05\ -\/\ Clears\ the\ NVRAM\ and\ updates\ the\ CRC}}
+\DoxyCodeLine{00303\ \textcolor{comment}{}}
+\DoxyCodeLine{00304\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00305\ \textcolor{preprocessor}{\#define\ CMD\_REG\ \ \ \ \ \ \ \ \ 8}}
+\DoxyCodeLine{00306\ \textcolor{preprocessor}{\#define\ CMD\_SYS\_RESET\ \ \ 0x01}}
+\DoxyCodeLine{00307\ \textcolor{preprocessor}{\#define\ CMD\_SLEEP\_1\ \ \ \ \ 0x02}}
+\DoxyCodeLine{00308\ \textcolor{preprocessor}{\#define\ CMD\_SLEEP\_2\ \ \ \ \ 0x03}}
+\DoxyCodeLine{00309\ \textcolor{preprocessor}{\#define\ CMD\_SLEEP\_3\ \ \ \ \ 0x04}}
+\DoxyCodeLine{00310\ \textcolor{preprocessor}{\#define\ CMD\_CLEAR\_NVRAM\ 0x05}}
+\DoxyCodeLine{00311\ }
+\DoxyCodeLine{00312\ \textcolor{comment}{/*\ addr:\ 8\ (Read)\ \ \ -\/\ Status\ Register\ (CMD\_STAT)}}
+\DoxyCodeLine{00313\ \textcolor{comment}{}}
+\DoxyCodeLine{00314\ \textcolor{comment}{\ \ \ Holds\ the\ status\ for}}
+\DoxyCodeLine{00315\ \textcolor{comment}{}}
+\DoxyCodeLine{00316\ \textcolor{comment}{}}
+\DoxyCodeLine{00317\ \textcolor{comment}{\ \ \ \ \ \ +-\/+-\/+-\/+-\/+-\/+-\/+-\/+-\/+}}
+\DoxyCodeLine{00318\ \textcolor{comment}{\ \ \ \ \ \ |7|6|5|4|3|2|1|0|}}
+\DoxyCodeLine{00319\ \textcolor{comment}{\ \ \ \ \ \ +-\/+-\/+-\/+-\/+-\/+-\/+-\/+-\/+}}
+\DoxyCodeLine{00320\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ |\ |}}
+\DoxyCodeLine{00321\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ |\ +-\/\ Bit\ 0}}
+\DoxyCodeLine{00322\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ |\ +-\/-\/-\/\ Bit\ 1}}
+\DoxyCodeLine{00323\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ |\ +-\/-\/-\/-\/-\/\ Bit\ 2}}
+\DoxyCodeLine{00324\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ |\ +-\/-\/-\/-\/-\/-\/-\/\ Bit\ 3}}
+\DoxyCodeLine{00325\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Bit\ 4}}
+\DoxyCodeLine{00326\ \textcolor{comment}{\ \ \ \ \ \ \ |\ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/Bit\ 5}}
+\DoxyCodeLine{00327\ \textcolor{comment}{\ \ \ \ \ \ \ |\ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ NVRAM\ Dirty\ bit,\ set\ on\ system\ power\ on\ indicating\ that\ the\ NVRAM\ is\ dirty.}}
+\DoxyCodeLine{00328\ \textcolor{comment}{\ \ \ \ \ \ \ +-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Checks\ the\ CRC\ of\ the\ NVRAM,\ 1\ =\ CRC\ Pass,\ 0\ =\ CRC\ check\ did\ not\ pass}}
+\DoxyCodeLine{00329\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00330\ \textcolor{preprocessor}{\#define\ CMD\_STAT\ \ \ \ \ \ \ \ CMD\_REG}}
+\DoxyCodeLine{00331\ \textcolor{preprocessor}{\#define\ NVRAM\_DIRTY\ \ \ \ \ 0x40}}
+\DoxyCodeLine{00332\ \textcolor{preprocessor}{\#define\ NVRAM\_CRC\ \ \ \ \ \ \ 0x80}}
+\DoxyCodeLine{00333\ }
+\DoxyCodeLine{00334\ \textcolor{comment}{/*\ addr:\ 0x80/0xC0\ (Write/Read)\ -\/\ Read\ and\ Write\ to\ the\ NVM\ memory\ bank}}
+\DoxyCodeLine{00335\ \textcolor{comment}{}}
+\DoxyCodeLine{00336\ \textcolor{comment}{\ \ \ These\ registers\ are\ used\ to\ pass\ data\ to\ and\ from\ the\ NVM\ data\ bank.}}
+\DoxyCodeLine{00337\ \textcolor{comment}{\ \ \ The\ lower\ 2\ bits\ holds\ address\ bits\ 0\ and\ 1\ and\ then\ it\ needs\ to\ be}}
+\DoxyCodeLine{00338\ \textcolor{comment}{\ \ \ followed\ by\ the\ high\ byte\ of\ the\ high\ address\ bits\ into\ the\ NVM\ memory}}
+\DoxyCodeLine{00339\ \textcolor{comment}{\ \ \ bank.}}
+\DoxyCodeLine{00340\ \textcolor{comment}{}}
+\DoxyCodeLine{00341\ \textcolor{comment}{\ \ \ Register\ 0x80\ is\ used\ to\ write\ data\ into\ the\ memory\ bank\ and\ 0xC0\ is}}
+\DoxyCodeLine{00342\ \textcolor{comment}{\ \ \ used\ to\ read\ data\ from\ the\ bank.}}
+\DoxyCodeLine{00343\ \textcolor{comment}{}}
+\DoxyCodeLine{00344\ \textcolor{comment}{\ \ \ Examples}}
+\DoxyCodeLine{00345\ \textcolor{comment}{}}
+\DoxyCodeLine{00346\ \textcolor{comment}{\ \ \ Write\ 4\ bytes\ to\ nvm\ bank\ example\ at\ position\ 514\ (0x202):}}
+\DoxyCodeLine{00347\ \textcolor{comment}{\ \ \ 0x82\ 0x20\ -\/\ 0x01\ 0x02\ 0x03\ 0x04}}
+\DoxyCodeLine{00348\ \textcolor{comment}{}}
+\DoxyCodeLine{00349\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00350\ }
+\DoxyCodeLine{00351\ \textcolor{preprocessor}{\#define\ I2C\_DEFAULT\_ADDRESS\ 0x18}}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00353\ \textcolor{preprocessor}{\#ifndef\ ILABS\_PMC\_H}}
+\DoxyCodeLine{00354\ \textcolor{preprocessor}{\#define\ ILABS\_PMC\_H}}
+\DoxyCodeLine{00355\ }
+\DoxyCodeLine{00356\ \textcolor{preprocessor}{\#include\ <Arduino.h>}}
+\DoxyCodeLine{00357\ \textcolor{preprocessor}{\#include\ <Wire.h>}}
+\DoxyCodeLine{00358\ }
+\DoxyCodeLine{00359\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classPMCClass}{PMCClass}}\ \{}
+\DoxyCodeLine{00360\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00361\ \ \ \ \ \mbox{\hyperlink{classPMCClass}{PMCClass}}();}
+\DoxyCodeLine{00362\ \ \ \ \ \mbox{\hyperlink{classPMCClass}{PMCClass}}(uint8\_t\ address)\ :\ i2c\_address(address)\ \{\};}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{classPMCClass_a688e8e46554cbf9b4cb687dc1057034e}{write\_reg}}(uint8\_t,\ uint8\_t);}
+\DoxyCodeLine{00365\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{classPMCClass_a23162c5601467e4b22af6d3b5b5d5ae6}{read\_reg}}(uint8\_t);\ }
+\DoxyCodeLine{00366\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classPMCClass_a9392d4ef130ca0b0f6f5055b58e11e2f}{begin}}();}
+\DoxyCodeLine{00367\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classPMCClass_a47a7a06c49cc1fce263418f4e0a18b19}{setLed}}(uint8\_t,\ \textcolor{keywordtype}{bool});}
+\DoxyCodeLine{00368\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{classPMCClass_a5a9c4d978273a2a23f22260ba11d51ca}{readStatus}}();}
+\DoxyCodeLine{00369\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{classPMCClass_a433814c6e487cc5914ae3d1235a41c33}{command}}(uint8\_t,\ \textcolor{keywordtype}{bool});}
+\DoxyCodeLine{00370\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{classPMCClass_ad6f8813f6bd0a5e6adb83836e0c62a8e}{configurePmc}}(uint8\_t,\ \textcolor{keyword}{enum}\ pit\_ctrl\_clk);}
+\DoxyCodeLine{00371\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{classPMCClass_adbb694f0bacaddc2fc42023d3e05b30e}{setSleepTimer}}(uint16\_t);}
+\DoxyCodeLine{00372\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{classPMCClass_afc63982650f6d12d5c4c57a3534949c2}{sleep}}(\textcolor{keywordtype}{double});}
+\DoxyCodeLine{00373\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{classPMCClass_a047a693630c0d0cfc146e2ff025175cb}{writeNVram32}}(uint8\_t\ *,\ uint16\_t,\ uint8\_t);}
+\DoxyCodeLine{00374\ \ \ \ \ uint8\_t\ writeNVram(uint8\_t\ *,\ uint16\_t,\ \textcolor{keywordtype}{int});}
+\DoxyCodeLine{00375\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classPMCClass_a08ba3a7244fba35b39d71d4521de9ab6}{readNVram32}}(uint8\_t\ *,\ uint16\_t,\ uint8\_t);}
+\DoxyCodeLine{00376\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classPMCClass_a5685c20a50599696c0685408bfe5b5bc}{readNVram}}(uint8\_t\ *,\ uint16\_t,\ uint16\_t);}
+\DoxyCodeLine{00377\ }
+\DoxyCodeLine{00378\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00379\ \ \ \ \ uint8\_t\ i2c\_address;}
+\DoxyCodeLine{00380\ \ \ \ \ uint8\_t\ led\_reg\_shadow\ =\ 0;}
+\DoxyCodeLine{00381\ \ \ \ \ uint8\_t\ g\_divider\ =\ PIT\_CTRL\_CYC16384;}
+\DoxyCodeLine{00382\ \ \ \ \ \textcolor{keyword}{enum}\ pit\_ctrl\_clk\ g\_clk\ =\ PIT\_CTRL\_CLK\_32768;}
+\DoxyCodeLine{00383\ \};}
+\DoxyCodeLine{00384\ }
+\DoxyCodeLine{00385\ \textcolor{keyword}{extern}\ \mbox{\hyperlink{classPMCClass}{PMCClass}}\ PMC;}
+\DoxyCodeLine{00386\ }
+\DoxyCodeLine{00387\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ ILABS\_PMC\_H}}
+
+\end{DoxyCode}

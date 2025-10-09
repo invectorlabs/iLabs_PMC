@@ -1,0 +1,274 @@
+\doxysection{PMCClass Class Reference}
+\hypertarget{classPMCClass}{}\label{classPMCClass}\index{PMCClass@{PMCClass}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classPMCClass_acb26a42dd3c8e969a628fe34d8d09c0f}\label{classPMCClass_acb26a42dd3c8e969a628fe34d8d09c0f} 
+{\bfseries PMCClass} (uint8\+\_\+t address)
+\item 
+uint8\+\_\+t \mbox{\hyperlink{classPMCClass_a688e8e46554cbf9b4cb687dc1057034e}{write\+\_\+reg}} (uint8\+\_\+t, uint8\+\_\+t)
+\begin{DoxyCompactList}\small\item\em Write a value to a register on the PMC device. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{classPMCClass_a23162c5601467e4b22af6d3b5b5d5ae6}{read\+\_\+reg}} (uint8\+\_\+t)
+\begin{DoxyCompactList}\small\item\em Read a value from a register on the PMC device. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classPMCClass_a9392d4ef130ca0b0f6f5055b58e11e2f}{begin}} ()
+\begin{DoxyCompactList}\small\item\em Initialize communication with the PMC device. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPMCClass_a47a7a06c49cc1fce263418f4e0a18b19}{set\+Led}} (uint8\+\_\+t, bool)
+\begin{DoxyCompactList}\small\item\em Set the state of an LED on the PMC device. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{classPMCClass_a5a9c4d978273a2a23f22260ba11d51ca}{read\+Status}} ()
+\begin{DoxyCompactList}\small\item\em Read the status from the PMC device. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{classPMCClass_a433814c6e487cc5914ae3d1235a41c33}{command}} (uint8\+\_\+t, bool)
+\begin{DoxyCompactList}\small\item\em Send a command to the PMC device. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{classPMCClass_ad6f8813f6bd0a5e6adb83836e0c62a8e}{configure\+Pmc}} (uint8\+\_\+t, enum pit\+\_\+ctrl\+\_\+clk)
+\begin{DoxyCompactList}\small\item\em Configure the PMC device\textquotesingle{}s timer system. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{classPMCClass_adbb694f0bacaddc2fc42023d3e05b30e}{set\+Sleep\+Timer}} (uint16\+\_\+t)
+\begin{DoxyCompactList}\small\item\em Set the sleep timer on the PMC device. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{classPMCClass_afc63982650f6d12d5c4c57a3534949c2}{sleep}} (double)
+\begin{DoxyCompactList}\small\item\em Put the PMC device to sleep for a specified duration. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{classPMCClass_a047a693630c0d0cfc146e2ff025175cb}{write\+NVram32}} (uint8\+\_\+t \texorpdfstring{$\ast$}{*}, uint16\+\_\+t, uint8\+\_\+t)
+\begin{DoxyCompactList}\small\item\em Write data to the non-\/volatile memory (NVM) of the PMC device. \end{DoxyCompactList}\item 
+\Hypertarget{classPMCClass_a0f32883ae9d6862ce3e4f00699d03751}\label{classPMCClass_a0f32883ae9d6862ce3e4f00699d03751} 
+uint8\+\_\+t {\bfseries write\+NVram} (uint8\+\_\+t \texorpdfstring{$\ast$}{*}, uint16\+\_\+t, int)
+\item 
+void \mbox{\hyperlink{classPMCClass_a08ba3a7244fba35b39d71d4521de9ab6}{read\+NVram32}} (uint8\+\_\+t \texorpdfstring{$\ast$}{*}, uint16\+\_\+t, uint8\+\_\+t)
+\begin{DoxyCompactList}\small\item\em Read 32 bytes of data from the non-\/volatile memory (NVM) of the PMC device. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classPMCClass_a5685c20a50599696c0685408bfe5b5bc}{read\+NVram}} (uint8\+\_\+t \texorpdfstring{$\ast$}{*}, uint16\+\_\+t, uint16\+\_\+t)
+\begin{DoxyCompactList}\small\item\em Read data from the non-\/volatile memory (NVM) of the PMC device. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classPMCClass_a9392d4ef130ca0b0f6f5055b58e11e2f}\label{classPMCClass_a9392d4ef130ca0b0f6f5055b58e11e2f} 
+\index{PMCClass@{PMCClass}!begin@{begin}}
+\index{begin@{begin}!PMCClass@{PMCClass}}
+\doxysubsubsection{\texorpdfstring{begin()}{begin()}}
+{\footnotesize\ttfamily bool PMCClass\+::begin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Initialize communication with the PMC device. 
+
+\begin{DoxyReturn}{Returns}
+true If the device was found and communication was established. 
+
+false If the device was not found or communication failed. 
+\end{DoxyReturn}
+\Hypertarget{classPMCClass_a433814c6e487cc5914ae3d1235a41c33}\label{classPMCClass_a433814c6e487cc5914ae3d1235a41c33} 
+\index{PMCClass@{PMCClass}!command@{command}}
+\index{command@{command}!PMCClass@{PMCClass}}
+\doxysubsubsection{\texorpdfstring{command()}{command()}}
+{\footnotesize\ttfamily uint8\+\_\+t PMCClass\+::command (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{command,  }\item[{bool}]{wait }\end{DoxyParamCaption})}
+
+
+
+Send a command to the PMC device. 
+
+This method writes a command byte to the PMC device using the appropriate register.
+
+
+\begin{DoxyParams}{Parameters}
+{\em command} & The command byte to send. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the command was sent successfully, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{classPMCClass_ad6f8813f6bd0a5e6adb83836e0c62a8e}\label{classPMCClass_ad6f8813f6bd0a5e6adb83836e0c62a8e} 
+\index{PMCClass@{PMCClass}!configurePmc@{configurePmc}}
+\index{configurePmc@{configurePmc}!PMCClass@{PMCClass}}
+\doxysubsubsection{\texorpdfstring{configurePmc()}{configurePmc()}}
+{\footnotesize\ttfamily uint8\+\_\+t PMCClass\+::configure\+Pmc (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{divider,  }\item[{enum pit\+\_\+ctrl\+\_\+clk}]{clk }\end{DoxyParamCaption})}
+
+
+
+Configure the PMC device\textquotesingle{}s timer system. 
+
+This method sets up the Peripheral Interval Timer (PIT) with the specified divider and clock source.\+This time base is used to internally run a 16 bit timer that determines the amount of time a system should sleep for. The PIT can be configured to run at either 32.\+768\+KHz or 1024Hz and have a prescaler that creates the time base. This prescaler (divider) can be configured in 14 steps as follows\+:
+
+CLK / 4 CLK / 8 CLK / 16 CLK / 32 CLK / 64 CLK / 128 CLK / 256 CLK / 512 CLK / 1024 CLK / 2048 CLK / 4096 CLK / 8192 CLK / 16384 CLK / 32768
+
+The sleep time can be derived from the following formula
+
+t = sleep\+\_\+timer / (freq / divider) \begin{DoxyVerb}freq={1024 | 32768}
+\end{DoxyVerb}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em divider} & The prescaler divider value. \\
+\hline
+{\em clk} & The clock source for the timer (1024Hz or 32768Hz). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the command was sent successfully, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{classPMCClass_a23162c5601467e4b22af6d3b5b5d5ae6}\label{classPMCClass_a23162c5601467e4b22af6d3b5b5d5ae6} 
+\index{PMCClass@{PMCClass}!read\_reg@{read\_reg}}
+\index{read\_reg@{read\_reg}!PMCClass@{PMCClass}}
+\doxysubsubsection{\texorpdfstring{read\_reg()}{read\_reg()}}
+{\footnotesize\ttfamily uint8\+\_\+t PMCClass\+::read\+\_\+reg (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{reg }\end{DoxyParamCaption})}
+
+
+
+Read a value from a register on the PMC device. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The register address to read from. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+uint8\+\_\+t The value read from the register. 
+\end{DoxyReturn}
+\Hypertarget{classPMCClass_a5685c20a50599696c0685408bfe5b5bc}\label{classPMCClass_a5685c20a50599696c0685408bfe5b5bc} 
+\index{PMCClass@{PMCClass}!readNVram@{readNVram}}
+\index{readNVram@{readNVram}!PMCClass@{PMCClass}}
+\doxysubsubsection{\texorpdfstring{readNVram()}{readNVram()}}
+{\footnotesize\ttfamily void PMCClass\+::read\+NVram (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{array,  }\item[{uint16\+\_\+t}]{offset,  }\item[{uint16\+\_\+t}]{len }\end{DoxyParamCaption})}
+
+
+
+Read data from the non-\/volatile memory (NVM) of the PMC device. 
+
+This function reads a specified number of bytes from the NVM starting from a given offset. The data is read in chunks to accommodate the I2C buffer size limitations. The slave can transmit back 32 bytes max due to its internal buffer size. These 32 bytes does not include the command byte, addres and length information. This means when reading data we can receive 32 bytes of actual data in one frame. Anything more needs to be chunked up just like in the write case.
+
+
+\begin{DoxyParams}{Parameters}
+{\em array} & Pointer to the data array where the read data will be stored. \\
+\hline
+{\em offset} & The starting address in NVM from where the data should be read. \\
+\hline
+{\em len} & The number of bytes to read from NVM. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classPMCClass_a08ba3a7244fba35b39d71d4521de9ab6}\label{classPMCClass_a08ba3a7244fba35b39d71d4521de9ab6} 
+\index{PMCClass@{PMCClass}!readNVram32@{readNVram32}}
+\index{readNVram32@{readNVram32}!PMCClass@{PMCClass}}
+\doxysubsubsection{\texorpdfstring{readNVram32()}{readNVram32()}}
+{\footnotesize\ttfamily void PMCClass\+::read\+NVram32 (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{array,  }\item[{uint16\+\_\+t}]{offset,  }\item[{uint8\+\_\+t}]{len }\end{DoxyParamCaption})}
+
+
+
+Read 32 bytes of data from the non-\/volatile memory (NVM) of the PMC device. 
+
+This function reads up to 32 bytes of data from the NVM starting from a given offset. The data is read in a single I2C transaction.
+
+
+\begin{DoxyParams}{Parameters}
+{\em array} & Pointer to the data array where the read data will be stored. \\
+\hline
+{\em offset} & The starting address in NVM from where the data should be read. \\
+\hline
+{\em len} & The number of bytes to read from NVM (maximum 32). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classPMCClass_a5a9c4d978273a2a23f22260ba11d51ca}\label{classPMCClass_a5a9c4d978273a2a23f22260ba11d51ca} 
+\index{PMCClass@{PMCClass}!readStatus@{readStatus}}
+\index{readStatus@{readStatus}!PMCClass@{PMCClass}}
+\doxysubsubsection{\texorpdfstring{readStatus()}{readStatus()}}
+{\footnotesize\ttfamily uint8\+\_\+t PMCClass\+::read\+Status (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Read the status from the PMC device. 
+
+This method is currently not implemented. \Hypertarget{classPMCClass_a47a7a06c49cc1fce263418f4e0a18b19}\label{classPMCClass_a47a7a06c49cc1fce263418f4e0a18b19} 
+\index{PMCClass@{PMCClass}!setLed@{setLed}}
+\index{setLed@{setLed}!PMCClass@{PMCClass}}
+\doxysubsubsection{\texorpdfstring{setLed()}{setLed()}}
+{\footnotesize\ttfamily void PMCClass\+::set\+Led (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{led,  }\item[{bool}]{state }\end{DoxyParamCaption})}
+
+
+
+Set the state of an LED on the PMC device. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em led} & The LED bitmask to set or clear. \\
+\hline
+{\em state} & True to turn the LED on, false to turn it off. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classPMCClass_adbb694f0bacaddc2fc42023d3e05b30e}\label{classPMCClass_adbb694f0bacaddc2fc42023d3e05b30e} 
+\index{PMCClass@{PMCClass}!setSleepTimer@{setSleepTimer}}
+\index{setSleepTimer@{setSleepTimer}!PMCClass@{PMCClass}}
+\doxysubsubsection{\texorpdfstring{setSleepTimer()}{setSleepTimer()}}
+{\footnotesize\ttfamily uint8\+\_\+t PMCClass\+::set\+Sleep\+Timer (\begin{DoxyParamCaption}\item[{uint16\+\_\+t}]{sleep\+\_\+timer }\end{DoxyParamCaption})}
+
+
+
+Set the sleep timer on the PMC device. 
+
+This method sets the 16-\/bit sleep timer value on the PMC device. The sleep timer determines how long the system will remain in sleep mode before waking up.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sleep\+\_\+timer} & The 16-\/bit value to set the sleep timer to. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the command was sent successfully, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{classPMCClass_afc63982650f6d12d5c4c57a3534949c2}\label{classPMCClass_afc63982650f6d12d5c4c57a3534949c2} 
+\index{PMCClass@{PMCClass}!sleep@{sleep}}
+\index{sleep@{sleep}!PMCClass@{PMCClass}}
+\doxysubsubsection{\texorpdfstring{sleep()}{sleep()}}
+{\footnotesize\ttfamily uint8\+\_\+t PMCClass\+::sleep (\begin{DoxyParamCaption}\item[{double}]{seconds }\end{DoxyParamCaption})}
+
+
+
+Put the PMC device to sleep for a specified duration. 
+
+This method configures the sleep timer and sends the sleep command to the PMC device. The system will enter sleep mode and will only wake up based on the configured wake-\/up sources or when the sleep timer expires.
+
+
+\begin{DoxyParams}{Parameters}
+{\em seconds} & The duration in seconds for which the system should sleep. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+This function does not return as the system enters sleep mode. 
+\end{DoxyReturn}
+\Hypertarget{classPMCClass_a688e8e46554cbf9b4cb687dc1057034e}\label{classPMCClass_a688e8e46554cbf9b4cb687dc1057034e} 
+\index{PMCClass@{PMCClass}!write\_reg@{write\_reg}}
+\index{write\_reg@{write\_reg}!PMCClass@{PMCClass}}
+\doxysubsubsection{\texorpdfstring{write\_reg()}{write\_reg()}}
+{\footnotesize\ttfamily uint8\+\_\+t PMCClass\+::write\+\_\+reg (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{reg,  }\item[{uint8\+\_\+t}]{data }\end{DoxyParamCaption})}
+
+
+
+Write a value to a register on the PMC device. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em reg} & The register address to write to. \\
+\hline
+{\em data} & The data byte to write. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classPMCClass_a047a693630c0d0cfc146e2ff025175cb}\label{classPMCClass_a047a693630c0d0cfc146e2ff025175cb} 
+\index{PMCClass@{PMCClass}!writeNVram32@{writeNVram32}}
+\index{writeNVram32@{writeNVram32}!PMCClass@{PMCClass}}
+\doxysubsubsection{\texorpdfstring{writeNVram32()}{writeNVram32()}}
+{\footnotesize\ttfamily uint8\+\_\+t PMCClass\+::write\+NVram32 (\begin{DoxyParamCaption}\item[{uint8\+\_\+t \texorpdfstring{$\ast$}{*}}]{array,  }\item[{uint16\+\_\+t}]{offset,  }\item[{uint8\+\_\+t}]{len }\end{DoxyParamCaption})}
+
+
+
+Write data to the non-\/volatile memory (NVM) of the PMC device. 
+
+This function writes a specified number of bytes to the NVM starting from a given offset. The data is sent in chunks to accommodate the I2C buffer size limitations.
+
+
+\begin{DoxyParams}{Parameters}
+{\em array} & Pointer to the data array to be written to NVM. \\
+\hline
+{\em offset} & The starting address in NVM where the data should be written. \\
+\hline
+{\em len} & The number of bytes to write to NVM. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/ilabs\+\_\+pmc.\+h\item 
+src/\mbox{\hyperlink{ilabs__pmc_8cpp}{ilabs\+\_\+pmc.\+cpp}}\end{DoxyCompactItemize}

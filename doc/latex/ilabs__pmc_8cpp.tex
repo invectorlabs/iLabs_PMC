@@ -1,0 +1,64 @@
+\doxysection{src/ilabs\+\_\+pmc.cpp File Reference}
+\hypertarget{ilabs__pmc_8cpp}{}\label{ilabs__pmc_8cpp}\index{src/ilabs\_pmc.cpp@{src/ilabs\_pmc.cpp}}
+
+
+Implementation file for the i\+Labs PMC (Power Management Controller) Arduino library.  
+
+
+{\ttfamily \#include "{}ilabs\+\_\+pmc.\+h"{}}\newline
+Include dependency graph for ilabs\+\_\+pmc.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=210pt]{ilabs__pmc_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ilabs__pmc_8cpp_aa4c9d32d14b8be856e7279b655524320}{I2\+C\+\_\+\+CHUNK\+\_\+\+SIZE}}~28
+\begin{DoxyCompactList}\small\item\em Write data to the non-\/volatile memory (NVM) of the PMC device. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{ilabs__pmc_8cpp_a59371b36ec7a8bc88c6ea84467441f37}\label{ilabs__pmc_8cpp_a59371b36ec7a8bc88c6ea84467441f37} 
+\mbox{\hyperlink{classPMCClass}{PMCClass}} {\bfseries PMC}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implementation file for the i\+Labs PMC (Power Management Controller) Arduino library. 
+
+This file contains the implementation of the \doxylink{classPMCClass}{PMCClass}, which provides methods to communicate with the i\+Labs PMC device over I2C. The class allows reading and writing registers, controlling LEDs, and initializing communication with the device.
+
+\begin{DoxyAuthor}{Author}
+Pontus 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+2025-\/10-\/09 
+\end{DoxyDate}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{ilabs__pmc_8cpp_aa4c9d32d14b8be856e7279b655524320}\label{ilabs__pmc_8cpp_aa4c9d32d14b8be856e7279b655524320} 
+\index{ilabs\_pmc.cpp@{ilabs\_pmc.cpp}!I2C\_CHUNK\_SIZE@{I2C\_CHUNK\_SIZE}}
+\index{I2C\_CHUNK\_SIZE@{I2C\_CHUNK\_SIZE}!ilabs\_pmc.cpp@{ilabs\_pmc.cpp}}
+\doxysubsubsection{\texorpdfstring{I2C\_CHUNK\_SIZE}{I2C\_CHUNK\_SIZE}}
+{\footnotesize\ttfamily \#define I2\+C\+\_\+\+CHUNK\+\_\+\+SIZE~28}
+
+
+
+Write data to the non-\/volatile memory (NVM) of the PMC device. 
+
+This function writes a specified number of bytes to the NVM starting from a given offset. The data is sent in chunks to accommodate the I2C buffer size limitations. The slave can receive up to 32bytes max due to its internal buffer size. These 32 bytes include the command byte and the following high byte of the address. This means we can only send 30 bytes of actual data in one frame. Anything more needs to be chunked up.
+
+
+\begin{DoxyParams}{Parameters}
+{\em array} & Pointer to the data array to be written to NVM. \\
+\hline
+{\em offset} & The starting address in NVM where the data should be written. \\
+\hline
+{\em len} & The number of bytes to write to NVM. \\
+\hline
+\end{DoxyParams}
