@@ -167,6 +167,12 @@ uint8_t PMCClass::setSleepTimer(uint16_t sleep_timer) {
     Wire.beginTransmission(0x18);
     Wire.write(SLEEP_TMR_LO);
     Wire.write(sleep_timer & 0xff);
+    uint8_t err = Wire.endTransmission();
+    if (err)
+      return err;
+
+    Wire.beginTransmission(0x18);
+    Wire.write(SLEEP_TMR_HI);
     Wire.write(sleep_timer >> 8);
     return Wire.endTransmission();
 }
@@ -188,7 +194,7 @@ uint8_t PMCClass::sleep(double seconds) {
     //Serial.printf("Selected clock %s\r\n", (g_clk ==  PIT_CTRL_CLK_1024 ? "1024" : "32768"));
     //Serial.printf("Used divider: %d\r\n", divtab[g_divider]);
     timer_val = ((g_clk ==  PIT_CTRL_CLK_1024 ? 1024 : 32768) / divtab[g_divider]) * seconds;
-    //Serial.printf("Time out in %d seconds\r\n", timer_val);
+    Serial.printf("Set sleep timer to %d seconds\r\n", timer_val);
     setSleepTimer(timer_val);
     command(CMD_SLEEP_2, false);
 

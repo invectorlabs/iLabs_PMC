@@ -24,7 +24,7 @@ The **iLabs PMC Arduino Library** provides an easy-to-use interface for communic
 
 1. Clone or download this repository into your Arduino `libraries` folder:
     ```sh
-    git clone https://github.com/yourusername/iLabs_PMC.git
+    git clone https://github.com/invectorlabs/iLabs_PMC.git
     ```
 2. Restart the Arduino IDE.
 
