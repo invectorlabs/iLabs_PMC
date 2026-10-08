@@ -12,6 +12,8 @@
 
 #include "ilabs_pmc.h"
 
+#define I2C_DEFAULT_ADDRESS 0x14
+
 // Constructor
 PMCClass::PMCClass() {
     i2c_address = I2C_DEFAULT_ADDRESS;
@@ -24,7 +26,7 @@ PMCClass::PMCClass() {
  * @param data The data byte to write.
  */
 uint8_t PMCClass::write_reg(uint8_t reg, uint8_t data) {
-    Wire.beginTransmission(0x18);
+    Wire.beginTransmission(I2C_DEFAULT_ADDRESS);
     Wire.write(reg);
     Wire.write(data);
     return Wire.endTransmission();
@@ -39,9 +41,14 @@ uint8_t PMCClass::write_reg(uint8_t reg, uint8_t data) {
 uint8_t PMCClass::read_reg(uint8_t reg) {
     Wire.beginTransmission(i2c_address);
     Wire.write(reg);
-    Wire.endTransmission();
-    Wire.requestFrom(i2c_address, (uint8_t)1);
-    return Wire.read();
+    uint8_t err = Wire.endTransmission(false);
+    if (err != 0) return 0;
+
+    uint8_t count = Wire.requestFrom((int)i2c_address, 1);
+    uint8_t value = Wire.read();
+    Serial.printf("Read 0x%02x from reg 0x%02x\r\n", value, reg);
+    return value;
+
 }
 
 /**
@@ -67,22 +74,28 @@ void PMCClass::setLed(uint8_t led, bool state) {
  * @return false If the device was not found or communication failed.
  */
 bool PMCClass::begin() {
+  Wire.setClock(100000); // Set I2C clock speed to 100kHz
   Wire.begin();
   Wire.beginTransmission(i2c_address);
   int error = Wire.endTransmission();
 
-  if (error)
-    return false;
+  if (error) {
+    Wire.beginTransmission(i2c_address);
+    int error = Wire.endTransmission();
+    if (error)
+      return false;
+  }
   return true;
 }
 
 /**
  * @brief Read the status from the PMC device.
  * 
- * This method is currently not implemented.
- */
+  */
 uint8_t PMCClass::readStatus() {
-    return PMC.read_reg(CMD_STAT);
+  uint8_t status = PMC.read_reg(CMD_STAT);
+  Serial.printf("PMC Status: 0x%02x\r\n", status);
+  return status;
 }
 
 /**
@@ -148,12 +161,78 @@ uint8_t PMCClass::configurePmc(uint8_t divider, enum pit_ctrl_clk clk) {
     if (clk == PIT_CTRL_CLK_1024)
       val |= 0x80;
 
-    Wire.beginTransmission(0x18);
+    Wire.beginTransmission(I2C_DEFAULT_ADDRESS);
     Wire.write(PIT_CTRL_REG);
     Wire.write(val);
     return Wire.endTransmission();
 }
 
+/**
+ * @brief Set the wake-up pin configuration on the PMC device.
+ *
+ * This method configures which pin(s) are used to wake up the system from sleep mode.
+ * The ATTiny firmware currently supports 13 unique wake-up pins from 0-12.
+ *
+ * @param pin The PMC pin(s) (channels) used to wake the system up. Each bit in the
+ *          parameter enables a specific wake-up pin. I.e. bit 0 enables pin 0,
+ *          bit 1 enables pin 1, etc.
+ * @return true if the command was sent successfully, false otherwise.
+ */
+uint8_t PMCClass::setWakeupPins(uint16_t pin) {
+  uint8_t err;
+
+  if (pin > 0x1FFF)
+    return 0xFF;
+  
+  pin = (pin & 0x1FFF) << 3; // Mask out invalid bits and shift to align high bits.
+
+  uint8_t ctrl0 = pin & 0xff;
+  uint8_t ctrl1 = pin >> 8;
+  
+  err = write_reg(CTRL_REG0, ctrl0);
+  if (err)
+    return err;
+  return write_reg(CTRL_REG1, ctrl1);
+}
+
+/**
+ * @brief Get the reason for the last wake-up from sleep.
+ *
+ * This method reads the status register from the PMC device to determine
+ * why the system woke up from sleep mode.
+ *
+ * @return The wake-up reason code.
+ */
+uint8_t PMCClass::getWakeupReason() {
+  wakeupReason = (int)read_reg(CMD_STAT);
+  return (wakeupReason & WUP_REASON_MASK) >> WUP_REASON_SHFT;
+}
+
+/**
+ * @brief Get the pin that caused the last wake-up from sleep.
+ *
+ * This method retrieves the pin number that triggered the wake-up event
+ * from the stored wake-up reason. The pin number corresponds to PMC MCU
+ * port pin number derived from the interrups register + the actual port
+ * number masked in at bit 3 in the result. This means that numbers 0-7
+ * are PORTA pins and numbers 8-15 are port B pins and 16-23 are port C pins.
+ * 
+ * Example: 0 = PA0, 7 = PA7, 8 = PB0, 15 = PB7, 16 = PC0, 23 = PC7.
+ *
+ * @return The pin number that caused the wake-up.
+ */
+uint8_t PMCClass::getWakeupPin() {
+  return read_reg(CMD_STAT+1);
+}
+
+uint16_t PMCClass::getBatteryVoltage() {
+  uint16_t voltage;
+
+  voltage = read_reg(BAT_VOLT_REG_LO);
+
+  voltage |= read_reg(BAT_VOLT_REG_HI) << 8;
+  return voltage;
+}
 /**
  * @brief Set the sleep timer on the PMC device.
  *
@@ -164,14 +243,14 @@ uint8_t PMCClass::configurePmc(uint8_t divider, enum pit_ctrl_clk clk) {
  * @return true if the command was sent successfully, false otherwise.
  */
 uint8_t PMCClass::setSleepTimer(uint16_t sleep_timer) {
-    Wire.beginTransmission(0x18);
+    Wire.beginTransmission(I2C_DEFAULT_ADDRESS);
     Wire.write(SLEEP_TMR_LO);
     Wire.write(sleep_timer & 0xff);
     uint8_t err = Wire.endTransmission();
     if (err)
       return err;
 
-    Wire.beginTransmission(0x18);
+    Wire.beginTransmission(I2C_DEFAULT_ADDRESS);
     Wire.write(SLEEP_TMR_HI);
     Wire.write(sleep_timer >> 8);
     return Wire.endTransmission();
@@ -194,7 +273,7 @@ uint8_t PMCClass::sleep(double seconds) {
     //Serial.printf("Selected clock %s\r\n", (g_clk ==  PIT_CTRL_CLK_1024 ? "1024" : "32768"));
     //Serial.printf("Used divider: %d\r\n", divtab[g_divider]);
     timer_val = ((g_clk ==  PIT_CTRL_CLK_1024 ? 1024 : 32768) / divtab[g_divider]) * seconds;
-    Serial.printf("Set sleep timer to %d seconds\r\n", timer_val);
+    //Serial.printf("Set sleep timer to %d seconds\r\n", timer_val);
     setSleepTimer(timer_val);
     command(CMD_SLEEP_2, false);
 
@@ -217,7 +296,7 @@ uint8_t PMCClass::writeNVram32(uint8_t *array, uint16_t offset, uint8_t len) {
     uint8_t cmd = 0x80 | (offset & 3);
     uint8_t addrhi = offset >> 2;
     //Serial.printf("addrhi = %d\r\n", addrhi);
-    Wire.beginTransmission(0x18);
+    Wire.beginTransmission(I2C_DEFAULT_ADDRESS);
     Wire.write(cmd);  // Write NVRAM command + low address bits
     Wire.write(addrhi);  // High address bits
     while(len--) {
@@ -277,7 +356,7 @@ uint8_t PMCClass::writeNVram(uint8_t *array, uint16_t offset, int len) {
 void PMCClass::readNVram32(uint8_t *array, uint16_t offset, uint8_t len) {
     uint8_t cmd = 0xC0 | (offset & 3);
     uint8_t addrhi = offset >> 2;
-    Wire.beginTransmission(0x18);
+    Wire.beginTransmission(I2C_DEFAULT_ADDRESS);
     Wire.write(cmd);  // Reads NVRAM command + low address bits
     Wire.write(addrhi);  // High address bits
     uint8_t lenlo = len & 0xff;
@@ -286,7 +365,7 @@ void PMCClass::readNVram32(uint8_t *array, uint16_t offset, uint8_t len) {
     Wire.write(lenlo); // Send low byte of length
     Wire.write(lenhi); // Send high byte of length
     Wire.endTransmission();
-    Wire.requestFrom(0x18, len);
+    Wire.requestFrom(I2C_DEFAULT_ADDRESS, len);
     for(int i=0;i<len;i++) {
       uint8_t ch = Wire.read();
       *array++ = ch;

@@ -313,23 +313,62 @@ enum pit_ctrl_clk {
 
    Holds the status for
 
-
       +-+-+-+-+-+-+-+-+
       |7|6|5|4|3|2|1|0|
       +-+-+-+-+-+-+-+-+
        | | | | | | | |
-       | | | | | | | +- Bit 0
-       | | | | | | +--- Bit 1
-       | | | | | +----- Bit 2
-       | | | | +------- Bit 3
-       | | | +--------- Bit 4
-       | | +------------Bit 5
+       | | | | | | | +- Bit 0 \
+       | | | | | | +--- Bit 1 -- wakeup pin field
+       | | | | | +----- Bit 2 /
+       | | | | +------- Bit 3 - Wakeup pin port
+       | | | +--------- Bit 4 - Wake up reason 0
+       | | +------------Bit 5 - Wake up reason 1
        | +------------- NVRAM Dirty bit, set on system power on indicating that the NVRAM is dirty.
        +--------------- Checks the CRC of the NVRAM, 1 = CRC Pass, 0 = CRC check did not pass
 */
 #define CMD_STAT        CMD_REG
-#define NVRAM_DIRTY     0x40
 #define NVRAM_CRC       0x80
+#define NVRAM_DIRTY     0x40
+#define WUP_REASON1     0x20
+#define WUP_REASON0     0x10
+#define WUP_REASON_MASK 0x30
+#define WUP_REASON_SHFT 0x04
+#define WUP_PORT        0x08
+#define WUP_PIN2        0x04
+#define WUP_PIN1        0x02
+#define WUP_PIN0        0x01
+#define WUP_PIN_MASK    0x07
+
+#define WUP_POWER_ON    0x00
+#define WUP_SLEEP_TIMER 0x01
+#define WUP_WAKE_PIN    0x02
+#define WUP_RXD         0x03
+
+/* addr: 0x0A and 0x0B (Read) - Battery voltage (BAT_VOLT_REG)
+
+   This register returns the last current voltage of the connected battery.
+   The returned value is of uint16_t type.
+   
+*/
+#define BAT_VOLT_REG    0x0A
+#define BAT_VOLT_REG_LO 0x0A
+#define BAT_VOLT_REG_HI 0x0B
+
+/* addr: 0x0A and 0x0B (Write) - Battery limit (BAT_LIM_REG)
+
+   This register sets the lower limit of the accepted battery voltage.
+   When this limit is reached the PMC will either wake the main MCU up
+   to inform that the battery is running out, or optionally if the
+   system is already up and running it will generate an interrupt to
+   the MCU.
+
+   This function is enabled by writing the desired level to this register
+   and can be disabled by writing 0xFFFF here.
+*/
+#define BAT_LIM_REG     0x0A
+#define BAT_LIM_REG_LO  0x0A
+#define BAT_LIM_REG_HI  0x0B
+
 
 /* addr: 0x80/0xC0 (Write/Read) - Read and Write to the NVM memory bank
 
@@ -347,8 +386,6 @@ enum pit_ctrl_clk {
    0x82 0x20 - 0x01 0x02 0x03 0x04
 
 */
-
-#define I2C_DEFAULT_ADDRESS 0x18
 
 #ifndef ILABS_PMC_H
 #define ILABS_PMC_H
@@ -368,8 +405,12 @@ public:
     uint8_t readStatus();
     uint8_t command(uint8_t, bool);
     uint8_t configurePmc(uint8_t, enum pit_ctrl_clk);
+    uint8_t setWakeupPins(uint16_t);
     uint8_t setSleepTimer(uint16_t);
     uint8_t sleep(double);
+    uint8_t getWakeupReason();
+    uint8_t getWakeupPin();
+    uint16_t getBatteryVoltage();
     uint8_t writeNVram32(uint8_t *, uint16_t, uint8_t);
     uint8_t writeNVram(uint8_t *, uint16_t, int);
     void readNVram32(uint8_t *, uint16_t, uint8_t);
@@ -378,6 +419,7 @@ public:
 private:
     uint8_t i2c_address;
     uint8_t led_reg_shadow = 0;
+    int wakeupReason = -1;
     uint8_t g_divider = PIT_CTRL_CYC16384;
     enum pit_ctrl_clk g_clk = PIT_CTRL_CLK_32768;
 };
