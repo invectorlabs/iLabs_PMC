@@ -209,20 +209,17 @@ uint8_t PMCClass::getWakeupReason() {
 }
 
 /**
- * @brief Get the pin that caused the last wake-up from sleep.
+ * @brief Get the wake-up pin that ended the last sleep.
  *
- * This method retrieves the pin number that triggered the wake-up event
- * from the stored wake-up reason. The pin number corresponds to PMC MCU
- * port pin number derived from the interrups register + the actual port
- * number masked in at bit 3 in the result. This means that numbers 0-7
- * are PORTA pins and numbers 8-15 are port B pins and 16-23 are port C pins.
- * 
- * Example: 0 = PA0, 7 = PA7, 8 = PB0, 15 = PB7, 16 = PC0, 23 = PC7.
+ * This method reads the wake-up pin field of the status register. The
+ * number is the same as the bit used in setWakeupPins(): 0 for wake-up
+ * pin 0, 1 for wake-up pin 1 and so on. It is only meaningful when
+ * getWakeupReason() returns WUP_WAKE_PIN, otherwise it is 0.
  *
- * @return The pin number that caused the wake-up.
+ * @return The number of the wake-up pin that woke the system.
  */
 uint8_t PMCClass::getWakeupPin() {
-  return read_reg(CMD_STAT+1);
+  return read_reg(CMD_STAT) & WUP_PIN_MASK;
 }
 
 uint16_t PMCClass::getBatteryVoltage() {

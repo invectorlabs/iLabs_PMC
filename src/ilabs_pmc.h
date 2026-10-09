@@ -218,9 +218,10 @@ enum pit_ctrl_clk {
 /* addr: 5 (Write)   - Sleep timer (SLEEP_TMR_LO)
 
    The least significant byte of the 16-bit sleep timer.
-   Sleep time is measured in steps of 0.1 seconds meaning that the PMD can force
-   the connected challenger board into sleep between 100 milliseconds all the
-   way up to 6553.5 seconds.
+   Sleep time is measured in PIT ticks, whose length is set in PIT_CTRL_REG
+   (0.5 seconds by default). With the default tick the PMC can force the
+   connected challenger board into sleep between 0.5 seconds and 65535 ticks,
+   about 9 hours.
 
 
       +-+-+-+-+-+-+-+-+
@@ -311,7 +312,7 @@ enum pit_ctrl_clk {
 
 /* addr: 8 (Read)   - Status Register (CMD_STAT)
 
-   Holds the status for
+   Holds the wake up reason and the NVRAM status.
 
       +-+-+-+-+-+-+-+-+
       |7|6|5|4|3|2|1|0|
@@ -320,11 +321,14 @@ enum pit_ctrl_clk {
        | | | | | | | +- Bit 0 \
        | | | | | | +--- Bit 1 -- wakeup pin field
        | | | | | +----- Bit 2 /
-       | | | | +------- Bit 3 - Wakeup pin port
+       | | | | +------- Bit 3 - Not used, always 0
        | | | +--------- Bit 4 - Wake up reason 0
        | | +------------Bit 5 - Wake up reason 1
        | +------------- NVRAM Dirty bit, set on system power on indicating that the NVRAM is dirty.
        +--------------- Checks the CRC of the NVRAM, 1 = CRC Pass, 0 = CRC check did not pass
+
+   The wakeup pin field holds the number of the wake up pin that ended the
+   last sleep. It is only valid when the wake up reason is WUP_WAKE_PIN.
 */
 #define CMD_STAT        CMD_REG
 #define NVRAM_CRC       0x80
@@ -375,15 +379,22 @@ enum pit_ctrl_clk {
    These registers are used to pass data to and from the NVM data bank.
    The lower 2 bits holds address bits 0 and 1 and then it needs to be
    followed by the high byte of the high address bits into the NVM memory
-   bank.
+   bank (address bits 2 to 9).
 
-   Register 0x80 is used to write data into the memory bank and 0xC0 is
-   used to read data from the bank.
+   Register 0x80 is used to write data into the memory bank. The address
+   bytes are followed by the data bytes to write.
+
+   Register 0xC0 is used to read data from the bank. The address bytes are
+   followed by the number of bytes to read, low byte first. The next I2C
+   read then returns that many bytes.
 
    Examples
 
    Write 4 bytes to nvm bank example at position 514 (0x202):
-   0x82 0x20 - 0x01 0x02 0x03 0x04
+   0x82 0x80 - 0x01 0x02 0x03 0x04
+
+   Read 4 bytes from position 514 (0x202):
+   0xC2 0x80 0x04 0x00, then read 4 bytes
 
 */
 

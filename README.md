@@ -94,7 +94,8 @@ PMC.command(CMD_SLEEP_2, false);         // Send the sleep command
   Why the board was powered on: `WUP_POWER_ON`, `WUP_SLEEP_TIMER` or `WUP_WAKE_PIN`.
 
 - `uint8_t getWakeupPin();`  
-  Which wake up pin woke the board. Not supported by the current PMC firmware.
+  Which wake up pin woke the board, numbered as in `setWakeupPins()`. Only valid when
+  `getWakeupReason()` returns `WUP_WAKE_PIN`.
 
 - `uint16_t getBatteryVoltage();`  
   Measure the battery voltage, in millivolts.
